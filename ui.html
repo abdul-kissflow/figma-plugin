@@ -1,0 +1,39 @@
+<fieldset>
+  <legend>Start Generator</legend>
+  <p>Count: <input id="count" value="5"></p>
+  <p>Fill Color: <input type="color" id="fillcolor" value="#f8fb37"></p>
+  <p>No-Fill Color: <input type="color" id="nofillcolor" value="#c6c6c6"></p>
+  <p>Color Count: <input id="colorcount" value="3"></p>
+  <p>Spacing: <input id="spacing" value="32"></p>
+</fieldset>
+<button id="generate" value="">Generate</button>
+<button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('generate').onclick = () => {
+  const count = parseInt(document.getElementById('count').value);
+  const colorCount = parseInt(document.getElementById('colorcount').value);
+  const fillcolorHex = document.getElementById('fillcolor').value;
+  const nofillcolorHex = document.getElementById('nofillcolor').value;
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16)/255,
+      g: parseInt(result[2], 16)/255,
+      b: parseInt(result[3], 16)/255
+    } : {
+      r:0, g:0, b:0
+    };
+  }
+
+  const fill = hexToRgb(fillcolorHex);
+  const nofill = hexToRgb(nofillcolorHex);
+  const spacing = parseInt(document.getElementById('spacing').value);
+  parent.postMessage({ pluginMessage: { type: 'create-star', payload:{count, fillcolorHex, nofillcolorHex, colorCount, fill, nofill, spacing }}}, '*');
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+</script>
